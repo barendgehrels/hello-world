@@ -16,8 +16,8 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val textView : TextView = binding.textviewFirst
-        val button : Button = binding.buttonFirst
+        val textView : TextView = binding.textViewSample
+        val button : Button = binding.buttonGetImage
         button.setOnClickListener {
             textView.text = "You clicked!"
         }
