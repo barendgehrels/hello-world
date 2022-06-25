@@ -3,5 +3,7 @@
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello World!</string>
     <string name="next">Click me</string>
+    <string name="one_moment">One moment...</string>
+    <string name="notify_no_image">Object received but it is not a bitmap</string>
 
 </resources>
