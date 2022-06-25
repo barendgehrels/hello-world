@@ -15,6 +15,7 @@ import java.util.concurrent.Executors
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+    var counter : Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,7 +42,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun retrieveImage(imageView : ImageView, textView : TextView) {
-        val imageURL = "https://raw.githubusercontent.com/barendgehrels/hello-world/main/data/cat_in_amsterdam.jpg"
+        // First call retrieves a fixed image, next calls retrieve a random image with Unsplash
+        val imageURL = when {
+            counter == 0 -> "https://raw.githubusercontent.com/barendgehrels/hello-world/main/data/cat_in_amsterdam.jpg"
+            else -> "https://source.unsplash.com/collection/19342828/350x300"
+        }
+        counter = (counter + 1) % 42
 
         try {
             val bitmap = BitmapFactory.decodeStream(java.net.URL(imageURL).openStream())
