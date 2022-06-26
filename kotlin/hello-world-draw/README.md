@@ -4,6 +4,14 @@
 
 This Kotlin app is based the Empty Activity template.
 
-The image view is drawn with a color, linear graphics (a rectangle), a dot, areal graphics (a triangle) and some word wrapped texts in alternating colors.
+The image view is drawn with:
+ * an open rectangle
+ * a dot
+ * a filled triangle
+ * a vector asset drawn as a bitmap
+ * a bitmap
+ * word wrapped texts in alternating colors
 
+
+![retrieve_image](doc/draw_vector.png)
 

@@ -1,5 +1,6 @@
 package org.barend.hw_draw
 
+import android.content.Context
 import android.graphics.*
 import android.os.Bundle
 import android.widget.ImageView
@@ -19,10 +20,11 @@ class MainActivity : AppCompatActivity() {
 
         val imageView : ImageView = binding.imageView
 
-        // Use layout change to detect any size change
+        // Use layout change to detect any size change,
+        // and to avoid creating the bitmap on creation (the views dimensions are still 0)
         imageView.addOnLayoutChangeListener { v, _, _, _, _, _, _, _, _ ->
             if (v.width > 0 && v.height > 0) {
-                imageView.setImageBitmap(createBitmap(v.width, v.height, listOf("Hello", "World"), Color.CYAN))
+                imageView.setImageBitmap(createBitmap(v.width, v.height, listOf("Hello", "World"), Color.DKGRAY))
             }
         }
 
@@ -35,7 +37,7 @@ class MainActivity : AppCompatActivity() {
                 listOf("You", "clicked", "the", "right", "button!",
                     "Therefore", "you", "get", "finally", "the", "answer",
                     "to", "the", "ultimate", "question", "of", "life,",
-                    "The", "universe", "and", "everything.",
+                    "the", "universe", "and", "everything.",
                     "And", "the", "answer", "is:", "42")))
         }
     }
@@ -44,42 +46,65 @@ class MainActivity : AppCompatActivity() {
 
         val margin : Float = 50.0f
 
-        val bitmap = Bitmap.createBitmap(
-            width, height,
-            Bitmap.Config.ARGB_8888
-        )
+        val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
 
         val canvas = Canvas(bitmap)
         canvas.drawColor(canvasColor)
 
         val paint = Paint()
 
-        //canvas.drawBitmap(map, 0.0f, 0.0f, paint)
-
         // 1: Draw a simple rectangle
-        val path = Path().apply {
-            moveTo(margin, margin)
-            lineTo(margin, height - margin)
-            lineTo(width - margin, height - margin)
-            lineTo(width - margin, margin)
-            close()
-        }
 
         paint.isAntiAlias = true
         paint.color = Color.BLUE
         paint.style = Paint.Style.STROKE
         paint.strokeWidth = 10.0f
 
-        canvas.drawPath(path, paint)
+        canvas.drawRect(margin, margin, width - margin, height - margin, paint)
 
         // 2: Draw a simple circle
         paint.style = Paint.Style.FILL
-        paint.color = Color.MAGENTA
-        canvas.drawCircle(width / 2.0f, height / 2.0f, 20.0f, paint)
+        paint.color = Color.GREEN
+        canvas.drawCircle(width * 0.6f, height * 0.75f, 25.0f, paint)
 
-        // 3: Draw the specified strings
+        // 3: Draw a filled triangle somewhere at the bottom left
+        paint.color = Color.RED
+        val path = Path().apply {
+            moveTo(width * 0.15f, height * 0.82f)
+            lineTo(width * 0.2f, height * 0.75f)
+            lineTo(width * 0.25f, height * 0.82f)
+            close()
+        }
+        canvas.drawPath(path, paint)
+
+        // 4: Draw bitmaps
+        // To get a bitmap, there are many options:
+        //   * refer to the other HelloWorld project "retrieve-draw-image" (which gets it from the Internet)
+        //   * include it as an VectorAsset (or a ImageAsset)
+        //     To do that, go to "res", right click, select "New", select "VectorAsset"
+        //   * include it as a plain JPG or PNG
+        //     To do that, drag any JPG or PNG file into the "res/drawable" folder
+        //     I used: https://icons8.com/icon/8n428k8C7l0w/pet-commands-follow
+        canvas.drawBitmap(createBitmapFromDrawable(R.drawable.cat_sample), width * 0.3f, height * 0.7f, paint)
+        canvas.drawBitmap(createBitmapFromDrawable(R.drawable.ic_person, 4), width * 0.7f, height * 0.7f, paint)
+
+        // 5: Draw the specified strings
         drawText(canvas, margin * 2.0f, width - margin * 2.0f, texts)
 
+        return bitmap
+    }
+
+    // Function that converts a vector asset, or a bitmap asset, to a bitmap
+    // Adapted from: https://www.geeksforgeeks.org/how-to-convert-a-vector-to-bitmap-in-android/
+    private fun createBitmapFromDrawable(drawableId: Int, multiplier : Int = 1): Bitmap {
+        val drawable = ContextCompat.getDrawable(this@MainActivity, drawableId)
+        val bitmap = Bitmap.createBitmap(
+            multiplier * drawable!!.intrinsicWidth,
+            multiplier * drawable.intrinsicHeight, Bitmap.Config.ARGB_8888
+        )
+        val canvas = Canvas(bitmap)
+        drawable.setBounds(0, 0, canvas.width, canvas.height)
+        drawable.draw(canvas)
         return bitmap
     }
 
