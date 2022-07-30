@@ -30,7 +30,7 @@ android {
         jvmTarget = '1.8'
     }
     buildFeatures {
-        // This is necessary
+        // This is necessary to use hw_retrieve_image.databinding.ActivityMainBinding
         viewBinding true
     }
 }
