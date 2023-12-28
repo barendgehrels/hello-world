@@ -7,13 +7,18 @@ android {
     compileSdk 32
 
     defaultConfig {
-        applicationId "org.barend.hw_retrieve_image"
+        applicationId "org.barend.withcpp"
         minSdk 28
         targetSdk 32
         versionCode 1
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        externalNativeBuild {
+            cmake {
+                cppFlags '-std=c++14'
+            }
+        }
     }
 
     buildTypes {
@@ -29,8 +34,13 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+    externalNativeBuild {
+        cmake {
+            path file('src/main/cpp/CMakeLists.txt')
+            version '3.18.1'
+        }
+    }
     buildFeatures {
-        // This is necessary to use databinding.ActivityMainBinding
         viewBinding true
     }
 }
@@ -38,7 +48,7 @@ android {
 dependencies {
 
     implementation 'androidx.core:core-ktx:1.7.0'
-    implementation 'androidx.appcompat:appcompat:1.4.2'
+    implementation 'androidx.appcompat:appcompat:1.5.1'
     implementation 'com.google.android.material:material:1.6.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     testImplementation 'junit:junit:4.13.2'
